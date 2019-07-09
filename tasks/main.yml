@@ -1,0 +1,21 @@
+---
+
+- name: postgresql apt key present
+  apt_key:
+    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+    state: present
+
+- name: postgresql apt list present
+  apt_repository:
+    repo: "deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_distribution_release }}-pgdg main"
+    filename: postgresql
+    state: present
+    update_cache: true
+
+- name: postgresql is installed
+  apt:
+    pkg: postgresql-11
+    state: present
+
+- name: postgresql is running
+  service: name=postgresql state=started enabled=yes
