@@ -14,7 +14,7 @@
 
 - name: postgresql is installed
   apt:
-    pkg: postgresql-12
+    pkg: postgresql-{{ postgresql_version }}
     state: present
 
 - name: postgresql is running
