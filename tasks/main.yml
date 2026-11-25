@@ -1,18 +1,33 @@
 ---
 
-- name: postgresql apt key present
-  get_url:
-    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
-    dest: /usr/share/keyrings/pgdg.asc
-    mode: '0644'
-    force: true
+- name: Remove the legacy PostgreSQL repository file
+  ansible.builtin.file:
+    path: /etc/apt/sources.list.d/pgdg.list
+    state: absent
+  register: postgresql_legacy_repository
 
-- name: postgresql apt list present
-  apt_repository:
-    repo: "deb [ signed-by=/usr/share/keyrings/pgdg.asc ] http://apt.postgresql.org/pub/repos/apt/ {{ ansible_distribution_release }}-pgdg main"
-    filename: pgdg
+- name: Install PostgreSQL repository dependencies
+  ansible.builtin.apt:
+    name:
+      - ca-certificates
+      - python3-debian
     state: present
+    cache_valid_time: 3600
+
+- name: Configure the PostgreSQL APT repository
+  ansible.builtin.deb822_repository:
+    name: pgdg
+    uris: https://apt.postgresql.org/pub/repos/apt/
+    suites: "{{ ansible_facts['distribution_release'] }}-pgdg"
+    components: main
+    signed_by: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+    state: present
+  register: postgresql_repository
+
+- name: Refresh the APT cache after PostgreSQL repository changes
+  ansible.builtin.apt:
     update_cache: true
+  when: postgresql_legacy_repository is changed or postgresql_repository is changed
 
 - name: postgresql is installed
   apt:
