@@ -30,12 +30,12 @@
   when: postgresql_legacy_repository is changed or postgresql_repository is changed
 
 - name: postgresql is installed
-  apt:
+  ansible.builtin.apt:
     pkg: postgresql-{{ postgresql_version }}
     state: present
 
 - name: postgresql is running
-  service:
+  ansible.builtin.service:
     name: postgresql
     state: started
     enabled: yes

@@ -2,6 +2,10 @@
 
 Setups PostgreSQL
 
+## Requirements
+
+- `ansible-core` 2.19 or newer.
+
 ### Example playbook
 ```yaml
 ---

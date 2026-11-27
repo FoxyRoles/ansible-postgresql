@@ -1,0 +1,25 @@
+---
+
+galaxy_info:
+  namespace: sunfoxcz
+  role_name: postgresql
+  author: Tomas Jacik
+  description: Install PostgreSQL from the PostgreSQL Global Development Group APT repository.
+  company: sunfoxcz
+  license: MIT
+  min_ansible_version: '2.19'
+  platforms:
+    - name: Debian
+      versions:
+        - bookworm
+        - trixie
+    - name: Ubuntu
+      versions:
+        - jammy
+        - noble
+        - resolute
+  galaxy_tags:
+    - postgresql
+    - database
+
+dependencies: []
